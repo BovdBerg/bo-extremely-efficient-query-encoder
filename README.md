@@ -6,6 +6,35 @@ incurring minor impact in quality.
 
 ## Instructions
 
+### Set up Conda environment
+0. Clone the repository.
+1. Install PyTorch based on your CUDA version from [PyTorch](https://pytorch.org/get-started/locally/).
+2. Install dependencies and Tevatron.
+```bash
+conda create -y -n tevatron python
+conda activate tevatron
+
+git clone https://github.com/texttron/tevatron.git
+cd tevatron
+git checkout tevatron-v1
+pip install -e .
+cd ../
+
+conda install -c nvidia cuda-compiler cuda
+pip install torch==1.10.1 faiss-cpu==1.7.2 transformers==4.15.0 datasets==1.17.0 peft deepspeed accelerate cycler lightning
+```
+
+
+### Preparation 
+Prepare data, tokenizer, negative samples, etc.
+Use the guidelines from examples/coCondenser-marco/README.md loosely...
+I tweaked the file get_data.sh (see below) to fit this reproduction more appropriately.
+1. `cd /examples/coCondenser-marco`
+2. `bash get_data.sh`
+
+
+### From Amazon extension
+0. `cd src/`
 1. Create (teacher) embeddings for all queries in the train set, using
    ```bash
    python -m tevatron.driver.encode --output_dir /tmp/encode --model_name_or_path Luyu/co-condenser-marco --fp16 \
