@@ -7,7 +7,6 @@ from transformers.trainer import Trainer
 import torch
 from torch.utils.data import DataLoader
 import torch.distributed as dist
-from transformers.trainer_utils import ShardedDDPOption
 
 from .loss import SimpleContrastiveLoss, DistributedContrastiveLoss
 
@@ -108,7 +107,6 @@ class TevatronTrainer(Trainer):
 
             optimizer_cls, optimizer_kwargs = Trainer.get_optimizer_cls_and_kwargs(self.args)
 
-            assert not self.sharded_ddp == ShardedDDPOption.SIMPLE
             if True:
                 self.optimizer = optimizer_cls(optimizer_grouped_parameters, **optimizer_kwargs)
                 assert not optimizer_cls.__name__ == "Adam8bit"
