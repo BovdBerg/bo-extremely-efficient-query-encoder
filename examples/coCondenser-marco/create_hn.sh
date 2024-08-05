@@ -1,7 +1,7 @@
 SCRIPT_DIR=$PWD
 TOKENIZER=bert-base-uncased
 TOKENIZER_ID=bert
-HN_DIR=bert/train-hn
+HN_DIR=$TOKENIZER_ID/train-hn
 
 cd marco
 mkdir -p $HN_DIR

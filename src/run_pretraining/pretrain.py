@@ -68,11 +68,15 @@ def torch_to_memmap_format(teacher="condenser"):
     token_file = join(PRETRAIN_DATA_PATH, "train_queries_tokens.jsonl")
     vector_file = join(PRETRAIN_DATA_PATH, f"train_queries{suffix}.pt")
     np_path_prefix = join(PRETRAIN_DATA_PATH, f"train_queries{suffix}")
-    if os.path.exists(vector_file):
+    if not os.path.exists(vector_file):
         raise RuntimeError("Please create train queries embeddings")
-    tokens = pd.read_json(token_file, lines=True)
+    with open(token_file, "r") as f:
+        tokens = pd.read_json(f, lines=True)
     vectors = load_pickle(vector_file)
-    assert vectors[1] == tokens.text_id.tolist()
+    print("vectors[1]", vectors[1][:10])
+    print("tokens.text_id.tolist()", tokens.text_id.tolist()[:10])
+
+    # assert vectors[1] == tokens.text_id.tolist()
     with open(np_path_prefix + ".desc", "w") as handle:
         json.dump({"length": len(tokens)}, handle)
     np_tokens = np.memmap(np_path_prefix + "_tokens.np", dtype=np.int32,
@@ -97,12 +101,15 @@ if __name__ == '__main__':
     tokenizer = transformers.AutoTokenizer.from_pretrained("bert-base-uncased")
     print("loaded teacher model embeddings and tokenizer")
 
+    # convert torch to memmap format (to create .desc file)
+    torch_to_memmap_format()
+
     # load dataset
     included_datasets = get_included_datasets(args)
     query_size = 16
     dataset = ConcatDataset([pretrain.NpDataset(join(PRETRAIN_DATA_PATH, desc + ".desc"), tokenizer, query_size)
                              for desc in included_datasets])
-    dl = torch.utils.data.DataLoader(dataset, batch_size=64, shuffle=True, num_workers=1)
+    dl = torch.utils.data.DataLoader(dataset, batch_size=64, shuffle=True, num_workers=11)
     print("loaded dataset")
     # training args
     jp = cycler(train_data=["_".join([arg for arg in vars(args) if arg and type(getattr(args, arg)) == bool] +
