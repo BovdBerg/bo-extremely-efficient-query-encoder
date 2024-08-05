@@ -39,7 +39,8 @@ I tweaked the file get_data.sh (see below) to fit this reproduction more appropr
 1. Create (teacher) embeddings for all queries in the train set, using `bash encoder_teacher.sh`
 2. Run pretraining using `python -m run_pretraining.pretrain`
 3. Run training using `bash marco_train_pretrained_model.sh`
-4. Evaluate using `bash full_eval.sh`
+4. Evaluate using `bash full_eval.sh <MODEL>`,
+e.g. `bash full_eval.sh Luyu/co-condenser-marco`
 
 ## Citations
 
