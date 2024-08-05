@@ -12,13 +12,15 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
-HN_FOLDER="../examples/coCondenser-marco/marco/bert/train-hn"
+TOKENIZER_ID=co-condenser-marco
+HN_FOLDER="../examples/coCondenser-marco/marco/$TOKENIZER_ID/train-hn"
 OUT_FOLDER="../outputs/models/reproduce"
 
-if [ ! -e $HN_FOLDER ] || [ ! -e $OUT_FOLDER ]; then
-  echo "please ensure hard negative folder and output folder are set appropriately"
+mkdir -p $OUT_FOLDER # Create OUT_FOLDER if it does not exist
+
+if [ ! -e $HN_FOLDER ]; then
+  echo "please ensure hard negative folder is set appropriately"
   echo "hn folder is created by following examples/coCondenser-marco/README.md"
-  echo "output folder is where you want the train results to reside. Simply create it."
   exit 1
 fi
 
@@ -34,6 +36,7 @@ TRAINING_MODEL_NAME="${MODEL_NAME}_e${EPOCHS}_${TP}"
 
 if [ -z "$MODEL_NAME" ]; then
   echo "put pretrained model path without a trailing /"
+  echo "MODEL_NAME: $MODEL_NAME"
   exit 1
 fi
 
