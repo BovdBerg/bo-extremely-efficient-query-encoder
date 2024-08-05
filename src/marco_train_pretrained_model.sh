@@ -12,7 +12,7 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
-TOKENIZER_ID=co-condenser-marco
+TOKENIZER_ID=bert
 HN_FOLDER="../examples/coCondenser-marco/marco/$TOKENIZER_ID/train-hn"
 OUT_FOLDER="../outputs/models/reproduce"
 

@@ -14,8 +14,8 @@ echo "Preprocessing data"
 join  -t "$(echo -en '\t')"  -e '' -a 1  -o 1.1 2.2 1.2  <(sort -k1,1 para.txt) <(sort -k1,1 para.title.txt) | sort -k1,1 -n > corpus.tsv
 awk -v RS='\r\n' '$1==last {printf ",%s",$3; next} NR>1 {print "";} {last=$1; printf "%s\t%s",$1,$3;} END{print "";}' qidpidtriples.train.full.2.tsv > train.negatives.tsv
 
-TOKENIZER=Luyu/co-condenser-marco
-TOKENIZER_ID=co-condenser-marco
+TOKENIZER=bert-base-uncased
+TOKENIZER_ID=bert
 
 echo "Training tokenizer $TOKENIZER and tokenizing queries & passages"
 python $SCRIPT_DIR/build_train.py --tokenizer_name $TOKENIZER --negative_file train.negatives.tsv --qrels qrels.train.tsv \
