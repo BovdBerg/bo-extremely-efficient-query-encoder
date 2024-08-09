@@ -31,7 +31,13 @@ Use the guidelines from examples/coCondenser-marco/README.md loosely...
 I tweaked the file get_data.sh (see below) to fit this reproduction more appropriately.
 1. `cd /examples/coCondenser-marco`
 2. `bash get_data.sh`
-3. `bash create_hn.sh`
+3. Execute all instructions in the other README
+- Get Data, 
+- Inference with Fine-tuned Checkpoint, 
+- Fine-tuning Stage 1, 
+- Mining Hard Negatives, 
+- Fine-tuning Stage 2
+- Encode and Search
 
 
 ### From Amazon extension
