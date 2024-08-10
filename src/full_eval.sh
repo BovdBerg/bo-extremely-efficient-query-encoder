@@ -15,24 +15,42 @@ MODEL=$1
 OUT_FOLD=/tmp/"$RANDOM"
 mkdir -p "$OUT_FOLD"
 echo $MODEL > "$OUT_FOLD"/model.txt
+
 echo "Encoding queries-----------"
-python -m tevatron.driver.encode --output_dir /tmp/encode --model_name_or_path $MODEL --fp16 --q_max_len 32 \
-      --encode_is_qry --per_device_eval_batch_size 128 --encode_in_path ../resources/pretrain_data/dev.query.json \
+python -m tevatron.driver.encode \
+      --output_dir /tmp/encode \
+      --model_name_or_path $MODEL \
+      --fp16 \
+      --q_max_len 32 \
+      --encode_is_qry --per_device_eval_batch_size 128 \
+      --encode_in_path ../resources/pretrain_data/dev.query.json \
       --encoded_save_path "$OUT_FOLD"/encoded_queries.pt
 if [ $? -ne 0 ]; then echo "error encoding queries"; rm -r "$OUT_FOLD"; exit 1; fi
-echo "Finished encoding queries, encoding passages-----------"
+
+echo "Finished encoding queries, now encoding passages-----------"
 TOKENIZER_ID=bert
 for i in $(seq -f "%02g" 0 9)
 do
-  python -m tevatron.driver.encode --output_dir /tmp/encode --model_name_or_path $MODEL --fp16 \
+  echo "Encoding split $i"
+  python -m tevatron.driver.encode \
+        --output_dir /tmp/encode \
+        --model_name_or_path $MODEL \
+        --fp16 \
         --per_device_eval_batch_size 128 \
         --encode_in_path ../examples/coCondenser-marco/marco/$TOKENIZER_ID/corpus/split${i}.json \
         --encoded_save_path "$OUT_FOLD"/split${i}.pt
 done
 if [ $? -ne 0 ]; then echo "error encoding passages"; rm -r "$OUT_FOLD"; exit 1; fi
-echo "Finished encoding passages-----------"
-python -m tevatron.faiss_retriever --query_reps "$OUT_FOLD"/encoded_queries.pt --passage_reps "$OUT_FOLD"/'split*.pt' \
-      --depth 1000 --batch_size -1 --save_text --save_ranking_to "$OUT_FOLD"/dev.rank.tsv
+
+echo "Finished encoding passages, now running the retriever-----------"
+python -m tevatron.faiss_retriever \
+      --query_reps "$OUT_FOLD"/encoded_queries.pt \
+      --passage_reps "$OUT_FOLD"/'split*.pt' \
+      --depth 1000 \
+      --batch_size -1 \
+      --save_text \
+      --save_ranking_to "$OUT_FOLD"/dev.rank.tsv
 if [ $? -ne 0 ]; then echo "error faiss retrieve"; rm -r "$OUT_FOLD"; exit 1; fi
 
+echo "Creating dev rank file"
 python ../examples/coCondenser-marco/score_to_marco "$OUT_FOLD"/dev.rank.tsv
