@@ -44,9 +44,15 @@ echo "Running ${MODEL_NAME} with ${EPOCHS} epochs."
 
 # Training regular model.
 python -m tevatron.driver.train --output_dir "${OUT_FOLDER}/${TRAINING_MODEL_NAME}" \
---model_name_or_path ${TP_MODEL} --freeze_passage_enc false --save_steps 62867 \
+--model_name_or_path ${TP_MODEL} \
+--freeze_passage_enc false \
+--save_steps 62867 \
 --train_dir ${HN_FOLDER} \
---fp16 --per_device_train_batch_size 8 --learning_rate 5e-6 --num_train_epochs ${EPOCHS} --dataloader_num_workers 3 \
+--fp16 \
+--per_device_train_batch_size 8 \
+--learning_rate 5e-6 \
+--num_train_epochs ${EPOCHS} \
+--dataloader_num_workers 3 \
 --rnn_query true ${PRETRAIN_PATH_PARAM}
 
 ./full_eval.sh ${OUT_FOLDER}/"${TRAINING_MODEL_NAME}"
