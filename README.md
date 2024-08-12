@@ -49,7 +49,7 @@ I tweaked the file get_data.sh (see below) to fit this reproduction more appropr
 ### From Amazon extension
 0. `cd src/`
 1. Create (teacher) embeddings for all queries in the train set, using `bash encoder_teacher.sh`
-2. Run pretraining using `python -m run_pretraining.pretrain` 
+2. Run pretraining using `bash pretrain.sh`
 <!-- TODO: 3. Is 'Mining hard negatives' missing here?... -->
 3. Run training using `bash marco_train_pretrained_model.sh <PRETRAINED_MODEL>`
     - e.g. `bash marco_train_pretrained_model.sh /scratch/bovandenberg/extremely-efficient-query-encoder/outputs/pretrained_models/240810-233627-635974`
