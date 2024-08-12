@@ -55,4 +55,4 @@ python -m tevatron.driver.train --output_dir "${OUT_FOLDER}/${TRAINING_MODEL_NAM
 --dataloader_num_workers 3 \
 --rnn_query true ${PRETRAIN_PATH_PARAM}
 
-./full_eval.sh ${OUT_FOLDER}/"${TRAINING_MODEL_NAME}"
+bash ./full_eval.sh ${OUT_FOLDER}/"${TRAINING_MODEL_NAME}"
