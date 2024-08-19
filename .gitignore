@@ -3,3 +3,4 @@ examples/coCondenser-marco/marco/
 resources/pretrain_data/
 outputs/
 src/lightning_logs/
+src/tevatron.egg-info/
