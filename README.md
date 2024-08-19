@@ -22,9 +22,16 @@ pip install git+https://github.com/texttron/tevatron.git@tevatron-v1
 # pip install -e .
 # cd ../
 
-conda install -c nvidia cuda-compiler cuda
-pip install torch==1.10.1 faiss-cpu==1.7.2 transformers==4.15.0 datasets==1.17.0 peft deepspeed accelerate cycler lightning[extra]
+conda install -c nvidia cuda-compiler cuda pytorch::faiss-cpu
+pip install torch==1.10.1 faiss-cpu==1.7.2 transformers==4.15.0 datasets==1.17.0 peft deepspeed accelerate cycler lightning[extra] numpy
 ```
+On Delftblue I got this vague error: https://stackoverflow.com/questions/77364550/attributeerror-module-pkgutil-has-no-attribute-impimporter-did-you-mean
+- I solved it by ```
+module purge
+module load 2023r1 miniconda3 DefaultModules
+pip install -e .
+module unload py-numpy  py-scipy py-setuptools py-matplotlib
+``` and maybe more outdated packages that are automatically loaded.
 
 
 ### Preparation 
