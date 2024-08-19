@@ -59,7 +59,7 @@ I tweaked the file get_data.sh (see below) to fit this reproduction more appropr
 2. Run pretraining using `bash pretrain.sh`
 <!-- TODO: 3. Is 'Mining hard negatives' missing here?... -->
 3. Run training using `bash marco_train_pretrained_model.sh <PRETRAINED_MODEL>`
-    - e.g. `bash marco_train_pretrained_model.sh /scratch/bovandenberg/extremely-efficient-query-encoder/outputs/pretrained_models/240810-233627-635974`
+    - e.g. `bash marco_train_pretrained_model.sh ../outputs/pretrained_models/240812-114052-352516`
 4. Evaluate using `bash full_eval.sh <MODEL>`
     - e.g. `bash full_eval.sh Luyu/co-condenser-marco`
 
