@@ -57,8 +57,23 @@ def main():
     parser.add_argument('--save_ranking_to', required=True)
     parser.add_argument('--save_text', action='store_true')
     parser.add_argument('--quiet', action='store_true')
-
+    parser.add_argument('--chunk_id', type=int)
+    parser.add_argument('--num_chunks', type=int)
+    parser.add_argument('--merge_chunks', action='store_true')
     args = parser.parse_args()
+
+    # If args.merge_chunks is set, merge the chunked query representations into a single file
+    if args.merge_chunks:
+        logger.info(f'Concatenate {args.num_chunks} chunked rankings into {args.save_ranking_to}')
+        # The files train_i.rank.tsv are already in the output format
+        with open(args.save_ranking_to, 'w') as f:
+            for i in range(args.num_chunks):
+                chunk_file = f'train_{i}.rank.tsv'
+                logger.info(f'Concatenating {chunk_file}')
+                with open(chunk_file, 'r') as f_chunk:
+                    f.write(f_chunk.read())
+        logger.info(f'Merged ranking saved to {args.save_ranking_to}')
+        return
 
     index_files = glob.glob(args.passage_reps)
     logger.info(f'Pattern match found {len(index_files)} files; loading them into index.')
@@ -75,7 +90,10 @@ def main():
         look_up += p_lookup
 
     q_reps, q_lookup = pickle_load(args.query_reps)
-    q_reps = q_reps
+
+    # If args.num_chunks and args.chunk_id are set, split the queries into chunks and only process the chunk_id-th chunk
+    if args.num_chunks > 1 and args.chunk_id >= 0:
+        q_reps = np.array_split(q_reps, args.num_chunks)[args.chunk_id]
 
     logger.info('Index Search Start')
     all_scores, psg_indices = search_queries(retriever, q_reps, look_up, args)
@@ -85,6 +103,7 @@ def main():
         write_ranking(psg_indices, all_scores, q_lookup, args.save_ranking_to)
     else:
         pickle_save((all_scores, psg_indices), args.save_ranking_to)
+    logger.info(f'Saved ranking to {args.save_ranking_to}')
 
 
 if __name__ == '__main__':
