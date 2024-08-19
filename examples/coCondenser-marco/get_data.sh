@@ -1,6 +1,7 @@
 SCRIPT_DIR=$PWD
 
 echo "Downloading MS MARCO data"
+# downloads the cleaned corpus hosted by RocketQA team
 wget --no-check-certificate https://rocketqa.bj.bcebos.com/corpus/marco.tar.gz
 tar -zxf marco.tar.gz
 rm -rf marco.tar.gz
@@ -12,12 +13,15 @@ gunzip qidpidtriples.train.full.2.tsv.gz
 
 echo "Preprocessing data"
 join  -t "$(echo -en '\t')"  -e '' -a 1  -o 1.1 2.2 1.2  <(sort -k1,1 para.txt) <(sort -k1,1 para.title.txt) | sort -k1,1 -n > corpus.tsv
+# generate BM25 negatives
 awk -v RS='\r\n' '$1==last {printf ",%s",$3; next} NR>1 {print "";} {last=$1; printf "%s\t%s",$1,$3;} END{print "";}' qidpidtriples.train.full.2.tsv > train.negatives.tsv
 
 TOKENIZER=bert-base-uncased
 TOKENIZER_ID=bert
 
 echo "Training tokenizer $TOKENIZER and tokenizing queries & passages"
+# tokenize train/inference data using BERT tokenizer
+# Or use pretrained Luyu/co-condenser-marco
 python $SCRIPT_DIR/build_train.py --tokenizer_name $TOKENIZER --negative_file train.negatives.tsv --qrels qrels.train.tsv \
   --queries train.query.txt --collection corpus.tsv --save_to ${TOKENIZER_ID}/train
 python $SCRIPT_DIR/tokenize_queries.py --tokenizer_name $TOKENIZER --query_file dev.query.txt --save_to $TOKENIZER_ID/query/dev.query.json
