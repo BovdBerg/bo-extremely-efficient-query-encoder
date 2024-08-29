@@ -12,5 +12,8 @@ python $SCRIPT_DIR/build_train_hn.py \
   --queries train.query.txt \
   --collection corpus.tsv \
   --save_to $HN_DIR
+cd ..
+cd $HN_DIR
+ln -s ../train/* .
 ln -s $TOKENIZER_ID/train/* $HN_DIR
-cd -
+cd ../../..
