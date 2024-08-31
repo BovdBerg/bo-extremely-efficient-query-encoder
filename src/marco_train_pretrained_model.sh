@@ -37,7 +37,7 @@ TP_MODEL="Luyu/co-condenser-marco"
 
 MODEL_NAME="${MODEL_LOC##*/}"
 PRETRAIN_PATH_PARAM="--rnn_pretrained_path ${MODEL_LOC}"
-TRAINING_MODEL_NAME="${MODEL_NAME}_e${EPOCHS}_${TP}"
+TRAINING_MODEL_NAME="${MODEL_NAME}_e${EPOCHS}_${TP_MODEL}"
 
 if [ -z "$MODEL_NAME" ]; then
   echo "put pretrained model path without a trailing /"
@@ -48,7 +48,7 @@ fi
 echo "Running ${MODEL_NAME} with ${EPOCHS} epochs."
 
 # Training regular model.
-python -m tevatron.driver.train --output_dir "${OUT_FOLDER}/${TRAINING_MODEL_NAME}" \
+srun python -m tevatron.driver.train --output_dir "${OUT_FOLDER}/${TRAINING_MODEL_NAME}" \
   --model_name_or_path ${TP_MODEL} \
   --freeze_passage_enc false \
   --save_steps 20000 \
