@@ -66,4 +66,4 @@ python -m tevatron.driver.train --output_dir "${OUT_FOLDER}/${TRAINING_MODEL_NAM
 #   rate and a linear learning rate schedule.
 # """
 
-bash ./full_eval.sh ${OUT_FOLDER}/"${TRAINING_MODEL_NAME}"
+# bash ./full_eval.sh ${OUT_FOLDER}/"${TRAINING_MODEL_NAME}"
