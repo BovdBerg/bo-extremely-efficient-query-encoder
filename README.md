@@ -62,8 +62,9 @@ I tweaked the file get_data.sh (see below) to fit this reproduction more appropr
 <!-- TODO: 3. Is 'Mining hard negatives' missing here?... -->
 3. Run training using `bash marco_train_pretrained_model.sh <PRETRAINED_MODEL>`
     - e.g. `bash marco_train_pretrained_model.sh ../outputs/pretrained_models/240812-114052-352516`
-4. Evaluate using `bash full_eval.sh <MODEL>`
-    - e.g. `./full_eval.sh ${OUT_FOLDER}/"${TRAINING_MODEL_NAME}"` with the 2 variables from marco_train_pretrained_model.sh.
+4. Evaluate using `bash full_eval.sh <MODEL_PATH>`
+    - e.g. `bash full_eval.sh "../outputs/models/reproduce/240812-114052-352516_e3_"` with the 2 variables from marco_train_pretrained_model.sh.\
+      - nothing after last _ because {TP} var does not exist in marco_train_pretrained_model.sh.
 
 
 ## Citations
