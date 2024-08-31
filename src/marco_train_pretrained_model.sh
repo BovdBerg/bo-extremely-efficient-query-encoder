@@ -16,6 +16,11 @@ TOKENIZER_ID=bert
 HN_FOLDER="../examples/coCondenser-marco/marco/$TOKENIZER_ID/train-hn"
 OUT_FOLDER="../outputs/models/reproduce"
 
+# Change Hugging Face cache directory to keep /home disk space usage low
+HF_CACHE_DIR=/scratch/bovandenberg/huggingface
+mkdir -p $HF_CACHE_DIR
+export HF_DATASETS_CACHE=$HF_CACHE_DIR
+
 mkdir -p $OUT_FOLDER # Create OUT_FOLDER if it does not exist
 
 if [ ! -e $HN_FOLDER ]; then
