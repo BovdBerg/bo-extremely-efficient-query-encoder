@@ -26,12 +26,14 @@ conda install -c nvidia cuda-compiler cuda pytorch::faiss-cpu
 pip install torch==1.10.1 faiss-cpu==1.7.2 transformers==4.15.0 datasets==1.17.0 peft deepspeed accelerate cycler lightning[extra] numpy
 ```
 On Delftblue I got this vague error: https://stackoverflow.com/questions/77364550/attributeerror-module-pkgutil-has-no-attribute-impimporter-did-you-mean
-- I solved it by ```
+- I solved it by 
+```
 module purge
 module load 2023r1 miniconda3 DefaultModules
 pip install -e .
 module unload py-numpy  py-scipy py-setuptools py-matplotlib
-``` and maybe more outdated packages that are automatically loaded.
+``` 
+and maybe more outdated packages that are automatically loaded.
 
 
 ### Preparation 
@@ -61,7 +63,8 @@ I tweaked the file get_data.sh (see below) to fit this reproduction more appropr
 3. Run training using `bash marco_train_pretrained_model.sh <PRETRAINED_MODEL>`
     - e.g. `bash marco_train_pretrained_model.sh ../outputs/pretrained_models/240812-114052-352516`
 4. Evaluate using `bash full_eval.sh <MODEL>`
-    - e.g. `bash full_eval.sh Luyu/co-condenser-marco`
+    - e.g. `./full_eval.sh ${OUT_FOLDER}/"${TRAINING_MODEL_NAME}"` with the 2 variables from marco_train_pretrained_model.sh.
+
 
 ## Citations
 
