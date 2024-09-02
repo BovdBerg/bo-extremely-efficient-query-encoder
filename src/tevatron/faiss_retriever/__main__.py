@@ -92,8 +92,9 @@ def main():
     q_reps, q_lookup = pickle_load(args.query_reps)
 
     # If args.num_chunks and args.chunk_id are set, split the queries into chunks and only process the chunk_id-th chunk
-    if args.num_chunks > 1 and args.chunk_id >= 0:
-        q_reps = np.array_split(q_reps, args.num_chunks)[args.chunk_id]
+    if args.num_chunks is not None and args.chunk_id is not None:
+        if args.num_chunks > 1 and args.chunk_id >= 0:
+            q_reps = np.array_split(q_reps, args.num_chunks)[args.chunk_id]
 
     logger.info('Index Search Start')
     all_scores, psg_indices = search_queries(retriever, q_reps, look_up, args)
